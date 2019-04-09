@@ -1,0 +1,33 @@
+* Docker images built with nix
+
+Experimental usage of [[https://nixos.wiki/wiki/NixOS_Modules][Nix modules]] to define and build docker
+images. The intention is to build an attribute map of depth 2 where
+the first layer is the image name, the second layer is the tag, and
+the build options are declared within.
+
+#+begin_src nix
+{ pkgs, config, lib, ... }:
+
+{
+  imports = [ ../postgresql ];
+  config = {
+    postgresql = {
+      dev = {
+        enable = true;
+        package = pkgs.postgresql_11;
+        enableTCPIP = true;
+        ...
+      };
+
+      other-tag = {
+        enable = true;
+        package = pkgs.postgresql_10;
+        enableTCPIP = true;
+        ...
+      };
+    };
+  };
+}
+#+end_src
+
+See the examples directory for a working example.
